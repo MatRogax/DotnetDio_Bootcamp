@@ -1,4 +1,4 @@
-namespace DesafioProjetoHospedagem.Models;
+namespace ConsoleApp1.DotnetDio_Bootcamp.Host_Project.Models;
 
 public class Pessoa
 {

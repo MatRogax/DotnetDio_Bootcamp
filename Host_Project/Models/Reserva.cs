@@ -1,4 +1,4 @@
-namespace DesafioProjetoHospedagem.Models
+namespace ConsoleApp1.DotnetDio_Bootcamp.Host_Project.Models
 {
     public class Reserva
     {
@@ -47,7 +47,7 @@ namespace DesafioProjetoHospedagem.Models
             // Regra: Caso os dias reservados forem maior ou igual a 10, conceder um desconto de 10%
             if (DiasReservados >= 10)
             {
-                valorDiaria -= valorDiaria * 0.10m; 
+                valorDiaria -= valorDiaria * 0.10m;
             }
 
             return valorDiaria;
