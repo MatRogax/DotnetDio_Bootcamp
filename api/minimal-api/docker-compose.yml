@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: postgresql_pgc
+    image: postgres:16.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgresql_pgc:/var/lib/postgresql/data
+    networks:
+      - postgres-compose-network
+
+  pgAdmin:
+    container_name: pgadmin_api
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "matheusrogato@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - postgres-compose-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-container
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PostgresConnection: Host=db;Port=5432;Database=meubanco;Username=admin;Password=admin123
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+volumes:
+  postgresql_pgc:
+
+networks:
+  postgres-compose-network:
+    driver: bridge
