@@ -1,7 +1,16 @@
+using Microsoft.EntityFrameworkCore;
 using minimal_api.domain.dtos;
+using minimal_api.domain.infrastructure.Database;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<DatabaseContent>(options =>
+{
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("PostgresConnection")
+    );
+});
 var app = builder.Build();
+
 
 // app.MapGet("/", () => "Hello World!");
 
