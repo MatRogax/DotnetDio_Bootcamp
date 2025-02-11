@@ -8,6 +8,7 @@ namespace minimal_api.domain.infrastructure.Database
         private readonly IConfiguration _configurationAppSettings;
 
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             modelBuilder.Entity<Admin>().HasData(
