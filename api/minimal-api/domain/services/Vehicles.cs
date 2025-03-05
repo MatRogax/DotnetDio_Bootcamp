@@ -15,7 +15,7 @@ namespace MinimalApi.domain.services
             _databaseContent = databaseContent;
         }
 
-        public List<Vehicle> AllVehicles(int page, string? name = null, string? mark = null)
+        public List<Vehicle> AllVehicles(int? page, string? name = null, string? mark = null)
         {
             var vehicles = _databaseContent.Vehicles.AsQueryable();
 
@@ -30,7 +30,11 @@ namespace MinimalApi.domain.services
             }
 
             int pageSize = 10;
-            vehicles = vehicles.Skip((page - 1) * pageSize).Take(pageSize);
+            if (page != null)
+            {
+
+                vehicles = vehicles.Skip(((int)page - 1) * pageSize).Take(pageSize);
+            }
 
             return vehicles.ToList();
         }
@@ -51,6 +55,11 @@ namespace MinimalApi.domain.services
         {
             _databaseContent.Add(vehicle);
             _databaseContent.SaveChanges();
+        }
+
+        public void IncludeVehicles(Vehicle vehicle)
+        {
+            throw new NotImplementedException();
         }
 
         public void UpdateVehicle(Vehicle vehicle)
