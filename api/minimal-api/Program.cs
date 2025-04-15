@@ -44,8 +44,39 @@ app.MapPost("/admin/login", ([FromBody] LoginDto loginDto, IAdminService adminSe
 #endregion
 
 #region Vehicle
+
+ErrorValidations validateDtoObj(VehicleDto vehicleDto)
+{
+    var validations = new ErrorValidations(
+        Message: new List<string>()
+    );
+
+    if (string.IsNullOrWhiteSpace(vehicleDto.Name))
+    {
+        validations.Message.Add("Preencha corretamente o campo Name");
+    }
+    if (string.IsNullOrWhiteSpace(vehicleDto.Mark))
+    {
+        validations.Message.Add("Preencha corretamente o campo Marca");
+    }
+    if (vehicleDto.Year < 1950)
+    {
+        validations.Message.Add("Veículo não pode ter ano menor que 1950");
+    }
+
+    return validations;
+}
+
 app.MapPost("/vehicles", ([FromBody] VehicleDto vehicleDto, IVehicleService vehicleService) =>
 {
+
+    var validations = validateDtoObj(vehicleDto);
+
+    if (validations.Message.Count > 0)
+    {
+        return Results.BadRequest(validations);
+    }
+
     Vehicle vehicle = new Vehicle
     {
         Name = vehicleDto.Name,
@@ -84,6 +115,13 @@ app.MapPut("/vehicles/{id}", ([FromRoute] int id, VehicleDto vehicleDto, IVehicl
     if (vehicle == null)
     {
         return Results.NotFound();
+    }
+
+    ErrorValidations validations = validateDtoObj(vehicleDto);
+
+    if (validations.Message.Count > 0)
+    {
+        return Results.BadRequest(validations);
     }
 
     vehicle.Name = vehicleDto.Name;

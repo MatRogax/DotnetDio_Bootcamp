@@ -8,7 +8,7 @@ namespace minimal_api.domain.entities
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } = default!;
+        public int Id { get; set; } = default;
         [Required]
         [StringLength(150)]
         public string Name { get; set; } = default!;
