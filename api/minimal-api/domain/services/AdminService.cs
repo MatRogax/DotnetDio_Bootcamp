@@ -14,20 +14,20 @@ namespace MinimalApi.domain.services
 
         public List<Admin> AllAdmins(int? page)
         {
-       
-            var admins = _databaseContent.Admins.AsQueryable();
+            const int pageSize = 10;
+            var adminsQuery = _databaseContent.Admins.AsQueryable();
 
-            int pageSize = 10;
-            if (page != null)
+            if (page.HasValue && page > 0)
             {
-
-                admins = admins.Skip(((int)page - 1) * pageSize).Take(pageSize);
+                adminsQuery = adminsQuery
+                    .Skip((page.Value - 1) * pageSize)
+                    .Take(pageSize);
             }
 
-            return admins.ToList();
+            return adminsQuery.ToList();
         }
-        
 
+        
         public Admin? Create(Admin admin)
         {
             _databaseContent.Add(admin);

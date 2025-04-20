@@ -2,6 +2,6 @@
 
 public enum Profile
 {
-    adm,
+    admin,
     editor,
 }
