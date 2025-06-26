@@ -21,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 var key = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(key))
 {
-    key = "this is my custom Secret key for authentication";
+    key = "this_is_my_custom_Secret_key_for_authentication";
 }
 
 
@@ -101,7 +101,7 @@ string GenerateJwtToken(Admin admin)
         Subject = new ClaimsIdentity(new[]
         {
             new Claim(ClaimTypes.Name, admin.Email),
-            new Claim(ClaimTypes.Role, admin.profile)
+            new Claim(ClaimTypes.Role, admin.Profile)
         }),
         Expires = DateTime.UtcNow.AddHours(1),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
@@ -128,7 +128,7 @@ app.MapPost("/admin/login", ([FromBody] LoginDto loginDto, IAdminService adminSe
     return Results.Ok(new adminLogged()
     {
         Email = admin.Email,
-        profile = admin.profile,
+        Profile = admin.Profile,
         Token = token
     });
 
@@ -151,7 +151,7 @@ app.MapPost("/admin/create", ([FromBody] AdminDto adminDto, IAdminService adminS
         validation.Message.Add("Preencha o campo de Senha");
     }
 
-    if (String.IsNullOrEmpty(adminDto.Profile?.ToString()))
+    if (String.IsNullOrEmpty(adminDto.Profile.ToString()))
     {
         validation.Message.Add("Perfil não pode ser vazio");
     }
@@ -160,7 +160,7 @@ app.MapPost("/admin/create", ([FromBody] AdminDto adminDto, IAdminService adminS
     {
         Email = adminDto.Email,
         Password = adminDto.Password,
-        profile = adminDto.Profile.ToString() ?? Profile.editor.ToString(),
+        Profile = adminDto.Profile.ToString() ?? Profile.Editor.ToString(),
     };
 
     adminService.Create(admin);
@@ -174,9 +174,9 @@ app.MapGet("/admins", (int? page, IAdminService adminService) =>
 
     var adminViews = admins.Select(adm => new AdminModelView
     {
-        id = adm.Id,
+        Id = adm.Id,
         Email = adm.Email,
-        Profile = adm.profile,
+        Profile = adm.Profile,
     }).ToList();
 
     return Results.Ok(adminViews);
@@ -199,9 +199,9 @@ app.MapGet("/admins/{id}", ([FromRoute] int id, IAdminService adminService) =>
 
         var getAdmin = new AdminModelView
         {
-            id = admin.Id,
+            Id = admin.Id,
             Email = admin.Email,
-            Profile = admin.profile,
+            Profile = admin.Profile,
         };
 
         return Results.Ok(getAdmin);

@@ -2,11 +2,11 @@
 
 namespace minimal_api.domain.ModelViews
 {
-    public record AdminModelView
+    public record adminLogged
     {
-        public int id { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string Profile { get; set; } = default!;
+        public string Token { get; set; } = default!;
 
     }
    

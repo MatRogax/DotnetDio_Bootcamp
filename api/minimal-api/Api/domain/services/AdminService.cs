@@ -8,7 +8,8 @@ namespace MinimalApi.domain.services
     public class AdminService : IAdminService
     {
         private readonly DatabaseContent _databaseContent;
-        public AdminService(DatabaseContent databaseContent){
+        public AdminService(DatabaseContent databaseContent)
+        {
             _databaseContent = databaseContent;
         }
 
@@ -27,7 +28,7 @@ namespace MinimalApi.domain.services
             return adminsQuery.ToList();
         }
 
-        
+
         public Admin? Create(Admin admin)
         {
             _databaseContent.Add(admin);
@@ -40,14 +41,18 @@ namespace MinimalApi.domain.services
         {
             var admin = _databaseContent.Admins.Where(admin => admin.Id == id).FirstOrDefault();
             return admin;
-            
+
         }
 
         public Admin? Login(LoginDto loginDto)
         {
-            var validUser = _databaseContent.Admins.Where(admin => admin.Email == loginDto.Email && admin.Password == loginDto.Password).FirstOrDefault();    
+            var validUser = _databaseContent.Admins.Where(
+                admin => admin.Email == loginDto.Email &&
+                admin.Password == loginDto.Password)
+                .FirstOrDefault();
+
             return validUser;
-            
+
         }
 
     }

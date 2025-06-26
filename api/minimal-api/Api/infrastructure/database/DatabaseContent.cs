@@ -15,7 +15,7 @@ namespace minimal_api.domain.infrastructure.Database
                 new Admin{
                     Id = 1, Email = "adm@teste.com",
                     Password = "123456",
-                    profile = "admin",
+                    Profile = "admin",
                 }
             );
         }
@@ -36,14 +36,13 @@ namespace minimal_api.domain.infrastructure.Database
             connection = "Host=db;Port=5432;Database=postgres;Username=postgres;Password=postgres";
         }
 
-        // Retry logic
         var retries = 5;
         while (retries > 0)
         {
             try
             {
                 optionsBuilder.UseNpgsql(connection);
-                break; // Connection succeeded, break out of the loop
+                break; 
             }
             catch (Exception ex)
             {

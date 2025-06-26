@@ -77,7 +77,6 @@ namespace minimal_api.Migrations
                         .HasColumnType("character varying(150)");
 
                     b.Property<int>("Year")
-                        .HasMaxLength(255)
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
