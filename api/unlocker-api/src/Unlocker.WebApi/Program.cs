@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Unlocker.Application;
-using Unlocker.Application.Abstractions.Persistence;
+using Unlocker.Application.Persistence.Abstractions;
 using Unlocker.Infrastructure;
 using Unlocker.Infrastructure.Persistence.Repositories;
 

@@ -1,27 +1,26 @@
-using Microsoft.EntityFrameworkCore;
 using Unlocker.Application.Persistence.Abstractions;
 using Unlocker.Domain.Entities;
 
 namespace Unlocker.Infrastructure.Persistence.Repositories;
 
-public class UserRepository(AppDbContext context) : IUserRepository
+public class ProductRepository : IProductRepository
 {
-    public Task<User?> GetByIdAsync(Guid id)
+    public Task<Product?> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<User>> GetAllAsync()
+    public Task<IEnumerable<Product>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task AddAsync(User entity)
+    public Task AddAsync(Product entity)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(User entity)
+    public Task UpdateAsync(Product entity)
     {
         throw new NotImplementedException();
     }

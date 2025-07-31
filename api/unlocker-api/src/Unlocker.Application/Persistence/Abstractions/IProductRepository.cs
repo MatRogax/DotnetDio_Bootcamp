@@ -1,11 +1,8 @@
 using Unlocker.Domain.Entities;
 
+namespace Unlocker.Application.Persistence.Abstractions;
 
-namespace Unlocker.Application.Abstractions.Persistence;
-
-public interface IProductRepository
+public interface IProductRepository : IHandlerRepository<Product>
 {
-    Task<Guid> CreateAsync(Product product);
-    Task<List<Product>> GetAllAsync();
-    Task<Product?> GetByIdAsync(Guid id);
+    
 }

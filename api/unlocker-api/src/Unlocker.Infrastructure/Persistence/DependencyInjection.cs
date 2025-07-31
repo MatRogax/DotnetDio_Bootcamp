@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Unlocker.Application.Persistence.Abstractions;
 using Unlocker.Infrastructure.Persistence;
-using Unlocker.Application.Abstractions.Persistence;
 using Unlocker.Infrastructure.Persistence.Repositories;
 
 namespace Unlocker.Infrastructure;

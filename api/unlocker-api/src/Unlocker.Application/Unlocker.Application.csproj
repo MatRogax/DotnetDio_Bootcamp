@@ -7,14 +7,17 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Unlocker.Domain\Unlocker.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Orders\" />
-    <Folder Include="Products\" />
-    <Folder Include="Users\Abstractions\" />
+    <Folder Include="Persistence\Abstractions\Commands\" />
+    <Folder Include="Persistence\Abstractions\Features\" />
+    <Folder Include="Persistence\Abstractions\Handlers\" />
+    <Folder Include="Persistence\Abstractions\Queries\" />
+    <Folder Include="Persistence\Abstractions\Validators\" />
   </ItemGroup>
 
 </Project>
