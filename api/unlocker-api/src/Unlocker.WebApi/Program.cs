@@ -1,24 +1,24 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Unlocker.Application;
+using Unlocker.Application.Abstractions.Persistence;
 using Unlocker.Infrastructure;
+using Unlocker.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Adiciona Controllers
 builder.Services.AddControllers();
 
-// ✅ Adiciona Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMediatR(typeof(ApplicationAssemblyMarker));
 
-// ✅ EF Core + PostgreSQL (Infrastructure Layer)
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-// ✅ Middleware de desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -34,11 +34,6 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 
-// ✅ Mapeia os Controllers
 app.MapControllers();
 
 app.Run();
-
-public class ApplicationAssemblyMarker
-{
-}

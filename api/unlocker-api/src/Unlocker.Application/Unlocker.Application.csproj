@@ -8,5 +8,13 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="11.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Unlocker.Domain\Unlocker.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Orders\" />
+    <Folder Include="Products\" />
+    <Folder Include="Users\Abstractions\" />
+  </ItemGroup>
 
 </Project>

@@ -9,14 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- MediatR para CQRS -->
         <PackageReference Include="MediatR" Version="11.1.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
-
-        <!-- Swagger / OpenAPI -->
+        
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-
-        <!-- Entity Framework Core + PostgreSQL -->
+        
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
