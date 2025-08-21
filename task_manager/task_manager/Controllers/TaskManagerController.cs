@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using task_manager.Data;
 using task_manager.Models;
+using task_manager.Models.Dtos;
 using task_manager.Repositories;
 
 namespace task_manager.Controllers
@@ -16,5 +19,77 @@ namespace task_manager.Controllers
             _repository = repository;
         }
 
+
+        public IActionResult GetById(int id)
+        {
+            TaskModel? task = _repository.GetByIdAsync(id).Result;
+
+            if (task == null)
+                return NotFound();
+
+            return Ok(task);
+        }
+
+        [HttpGet("ObterTodos")]
+        public IActionResult GetAllTasks()
+        {
+            List<TaskModel> tasks = _repository.GetAllAsync().Result;
+            return Ok(tasks);
+
+        }
+
+        [HttpGet("ObterPorTitulo")]
+        public IActionResult GetByTitle(string titulo)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("ObterPorData")]
+        public IActionResult GetByData(DateTime data)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("ObterPorStatus")]
+        public IActionResult GetByStatus(EnumTaskStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public IActionResult Create(TaskModel task)
+        {
+            TaskModel createdTask = _repository.AddAsync(task).Result;
+            return CreatedAtAction(nameof(GetById), new { id = createdTask.Id }, createdTask);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTask(int id, UpdateTaskDto TaskData)
+        {
+            try
+            {
+                await _repository.UpdateAsync(id, TaskData);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var taskExists = await _repository.GetByIdAsync(id);
+
+            if (taskExists == null)
+            {
+                return NotFound();
+            }
+
+            await _repository.DeleteAsync(id);
+            return NoContent();
+        }
     }
 }
