@@ -3,6 +3,7 @@ using System;
 using task_manager.Data;
 using task_manager.Models;
 using task_manager.Models.Dtos;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace task_manager.Repositories
 {
@@ -43,22 +44,36 @@ namespace task_manager.Repositories
             TaskModel? task = await _context.Tasks.FindAsync(id);
             return task;
         }
-        public Task<TaskModel?> GetByTitle(string title)
+        public async Task<TaskModel?> GetByTitle(string title)
         {
-            throw new NotImplementedException();
+            TaskModel? task = await _context.Tasks.FirstOrDefaultAsync(task => task.Title.Equals(title));
+            return task;
         }
 
-        public Task<List<TaskModel?>> GetByDate(string date)
+        public async Task<List<TaskModel?>> GetByDate(string date)
         {
-            throw new NotImplementedException();
+            List<TaskModel?> tasks = new List<TaskModel?>();
+            if (!DateTime.TryParse(date, out DateTime parsedDate))
+            {
+                return tasks;
+            }
+
+            tasks = await _context.Tasks
+                .Where(task => task.Date.Date.Equals(parsedDate.Date))
+                .Cast<TaskModel?>()
+                .ToListAsync();
+
+            return tasks;
         }
 
-
-        public Task<List<TaskModel>> GetByStatus(EnumTaskStatus status)
+        public async Task<List<TaskModel>> GetByStatus(EnumTaskStatus status)
         {
-            throw new NotImplementedException();
-        }
+            List<TaskModel> tasks = await _context.Tasks
+                .Where(task => task.Status.Equals(status))
+                .ToListAsync();
 
+            return tasks;
+        }
 
         public async Task<TaskModel?> UpdateAsync(int id, UpdateTaskDto updateData)
         {

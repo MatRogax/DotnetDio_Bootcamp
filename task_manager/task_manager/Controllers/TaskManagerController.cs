@@ -19,7 +19,6 @@ namespace task_manager.Controllers
             _repository = repository;
         }
 
-
         public IActionResult GetById(int id)
         {
             TaskModel? task = _repository.GetByIdAsync(id).Result;
@@ -41,19 +40,22 @@ namespace task_manager.Controllers
         [HttpGet("ObterPorTitulo")]
         public IActionResult GetByTitle(string titulo)
         {
-            throw new NotImplementedException();
+            TaskModel? task = _repository.GetByTitle(titulo).Result;
+            return Ok(task);
         }
 
         [HttpGet("ObterPorData")]
         public IActionResult GetByData(DateTime data)
         {
-            throw new NotImplementedException();
+            List<TaskModel?> tasks = _repository.GetByDate(data.ToString()).Result;
+            return Ok(tasks);
         }
 
         [HttpGet("ObterPorStatus")]
         public IActionResult GetByStatus(EnumTaskStatus status)
         {
-            throw new NotImplementedException();
+            List<TaskModel> tasks = _repository.GetByStatus(status).Result;
+            return Ok(tasks);
         }
 
         [HttpPost]
