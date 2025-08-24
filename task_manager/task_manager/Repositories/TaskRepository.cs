@@ -16,11 +16,23 @@ namespace task_manager.Repositories
             _context = context;
         }
 
-        public async Task<TaskModel> AddAsync(TaskModel task)
+        public async Task<Tasks> AddAsync(CreateTaskDto task)
         {
-            await _context.Tasks.AddAsync(task);
+            EnumTaskStatus status = EnumTaskStatusExtension.ToTaskStatus(task.Status);
+            DateTime date = DateTime.Now.ToUniversalTime();
+
+            Tasks newTask = new Tasks
+            {
+                Title = task.Title,
+                Description = task.Description,
+                Date = date,
+                Status = status
+            };
+
+            await _context.Tasks.AddAsync(newTask);
             await _context.SaveChangesAsync();
-            return task;
+
+            return newTask;
         }
 
         public async Task DeleteAsync(int id)
@@ -34,25 +46,25 @@ namespace task_manager.Repositories
             }
         }
 
-        public async Task<List<TaskModel>> GetAllAsync()
+        public async Task<List<Tasks>> GetAllAsync()
         {
-            List<TaskModel> allTasks = await _context.Tasks.ToListAsync();
+            List<Tasks> allTasks = await _context.Tasks.ToListAsync();
             return allTasks;
         }
-        public async Task<TaskModel?> GetByIdAsync(int id)
+        public async Task<Tasks?> GetByIdAsync(int id)
         {
-            TaskModel? task = await _context.Tasks.FindAsync(id);
+            Tasks? task = await _context.Tasks.FindAsync(id);
             return task;
         }
-        public async Task<TaskModel?> GetByTitle(string title)
+        public async Task<Tasks?> GetByTitle(string title)
         {
-            TaskModel? task = await _context.Tasks.FirstOrDefaultAsync(task => task.Title.Equals(title));
+            Tasks? task = await _context.Tasks.FirstOrDefaultAsync(task => task.Title.Equals(title));
             return task;
         }
 
-        public async Task<List<TaskModel?>> GetByDate(string date)
+        public async Task<List<Tasks?>> GetByDate(string date)
         {
-            List<TaskModel?> tasks = new List<TaskModel?>();
+            List<Tasks?> tasks = new List<Tasks?>();
             if (!DateTime.TryParse(date, out DateTime parsedDate))
             {
                 return tasks;
@@ -60,24 +72,24 @@ namespace task_manager.Repositories
 
             tasks = await _context.Tasks
                 .Where(task => task.Date.Date.Equals(parsedDate.Date))
-                .Cast<TaskModel?>()
+                .Cast<Tasks?>()
                 .ToListAsync();
 
             return tasks;
         }
 
-        public async Task<List<TaskModel>> GetByStatus(EnumTaskStatus status)
+        public async Task<List<Tasks>> GetByStatus(EnumTaskStatus status)
         {
-            List<TaskModel> tasks = await _context.Tasks
+            List<Tasks> tasks = await _context.Tasks
                 .Where(task => task.Status.Equals(status))
                 .ToListAsync();
 
             return tasks;
         }
 
-        public async Task<TaskModel?> UpdateAsync(int id, UpdateTaskDto updateData)
+        public async Task<Tasks?> UpdateAsync(int id, UpdateTaskDto updateData)
         {
-            TaskModel? entity = await _context.Tasks.FindAsync(id);
+            Tasks? entity = await _context.Tasks.FindAsync(id);
 
             if (entity == null)
                 return null;
@@ -88,11 +100,10 @@ namespace task_manager.Repositories
             if (!string.IsNullOrWhiteSpace(updateData.Description))
                 entity.Description = updateData.Description;
 
-            if (updateData.Date != null)
-                entity.Date = updateData.Date.Value;
-
             if (updateData.Status != null)
                 entity.Status = updateData.Status.Value;
+
+            entity.Date = DateTime.Now.ToUniversalTime();
 
             await _context.SaveChangesAsync();
 

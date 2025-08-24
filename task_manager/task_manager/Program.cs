@@ -1,11 +1,14 @@
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using task_manager.Data;
+using task_manager.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<TaskContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionStrings")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

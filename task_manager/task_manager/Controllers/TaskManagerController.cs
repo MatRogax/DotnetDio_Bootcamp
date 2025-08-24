@@ -12,16 +12,17 @@ namespace task_manager.Controllers
     [Route("[controller]")]
     public class TaskManagerController : ControllerBase
     {
-        private readonly TaskRepository _repository;
+        private readonly ITaskRepository _repository;
 
-        public TaskManagerController(TaskRepository repository)
+        public TaskManagerController(ITaskRepository repository)
         {
             _repository = repository;
         }
 
+        [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            TaskModel? task = _repository.GetByIdAsync(id).Result;
+            Tasks? task = _repository.GetByIdAsync(id).Result;
 
             if (task == null)
                 return NotFound();
@@ -32,7 +33,7 @@ namespace task_manager.Controllers
         [HttpGet("ObterTodos")]
         public IActionResult GetAllTasks()
         {
-            List<TaskModel> tasks = _repository.GetAllAsync().Result;
+            List<Tasks> tasks = _repository.GetAllAsync().Result;
             return Ok(tasks);
 
         }
@@ -40,28 +41,28 @@ namespace task_manager.Controllers
         [HttpGet("ObterPorTitulo")]
         public IActionResult GetByTitle(string titulo)
         {
-            TaskModel? task = _repository.GetByTitle(titulo).Result;
+            Tasks? task = _repository.GetByTitle(titulo).Result;
             return Ok(task);
         }
 
         [HttpGet("ObterPorData")]
         public IActionResult GetByData(DateTime data)
         {
-            List<TaskModel?> tasks = _repository.GetByDate(data.ToString()).Result;
+            List<Tasks?> tasks = _repository.GetByDate(data.ToString()).Result;
             return Ok(tasks);
         }
 
         [HttpGet("ObterPorStatus")]
         public IActionResult GetByStatus(EnumTaskStatus status)
         {
-            List<TaskModel> tasks = _repository.GetByStatus(status).Result;
+            List<Tasks> tasks = _repository.GetByStatus(status).Result;
             return Ok(tasks);
         }
 
         [HttpPost]
-        public IActionResult Create(TaskModel task)
+        public IActionResult Create([FromBody] CreateTaskDto task)
         {
-            TaskModel createdTask = _repository.AddAsync(task).Result;
+            Tasks createdTask = _repository.AddAsync(task).Result;
             return CreatedAtAction(nameof(GetById), new { id = createdTask.Id }, createdTask);
         }
 

@@ -1,10 +1,21 @@
-﻿namespace task_manager.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace task_manager.Models
 {
-    public class TaskModel
+    public class Tasks
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; } = default!;
+
+        [Required]
+        [StringLength(50)]
+        public string Title { get; set; } = default!;
+
+        [Required]
+        [StringLength(255)]
+        public string Description { get; set; } = default!;
         public DateTime Date { get; set; }
         public EnumTaskStatus Status { get; set; }
     }

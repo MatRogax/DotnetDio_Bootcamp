@@ -10,6 +10,13 @@ namespace task_manager.Data
 
         }
 
-        public DbSet<TaskModel> Tasks { get; set; }
+        public DbSet<Tasks> Tasks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Tasks>()
+                .Property(t => t.Status)
+                .HasConversion<string>(); 
+        }
     }
 }
