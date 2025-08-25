@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Extensions;
 using System;
+using System.Threading.Tasks;
 using task_manager.Data;
 using task_manager.Models;
 using task_manager.Models.Dtos;
@@ -51,11 +53,13 @@ namespace task_manager.Repositories
             List<Tasks> allTasks = await _context.Tasks.ToListAsync();
             return allTasks;
         }
+
         public async Task<Tasks?> GetByIdAsync(int id)
         {
             Tasks? task = await _context.Tasks.FindAsync(id);
             return task;
         }
+
         public async Task<Tasks?> GetByTitle(string title)
         {
             Tasks? task = await _context.Tasks.FirstOrDefaultAsync(task => task.Title.Equals(title));
@@ -64,14 +68,11 @@ namespace task_manager.Repositories
 
         public async Task<List<Tasks?>> GetByDate(string date)
         {
-            List<Tasks?> tasks = new List<Tasks?>();
-            if (!DateTime.TryParse(date, out DateTime parsedDate))
-            {
-                return tasks;
-            }
+            string formatDate = Utils.ToFormattedDate(date);
+            DateTime dateToFind = DateTime.Parse(formatDate).ToUniversalTime();
 
-            tasks = await _context.Tasks
-                .Where(task => task.Date.Date.Equals(parsedDate.Date))
+            List<Tasks?> tasks = await _context.Tasks
+                .Where(task => task.Date.Date.Equals(dateToFind.Date))
                 .Cast<Tasks?>()
                 .ToListAsync();
 
@@ -95,14 +96,21 @@ namespace task_manager.Repositories
                 return null;
 
             if (!string.IsNullOrWhiteSpace(updateData.Title))
+            {
                 entity.Title = updateData.Title;
+            }
 
             if (!string.IsNullOrWhiteSpace(updateData.Description))
+            {
                 entity.Description = updateData.Description;
+            }
 
             if (updateData.Status != null)
-                entity.Status = updateData.Status.Value;
-
+            {
+                EnumTaskStatus status = EnumTaskStatusExtension.ToTaskStatus(updateData.Status);
+                entity.Status = status;
+            }
+                
             entity.Date = DateTime.Now.ToUniversalTime();
 
             await _context.SaveChangesAsync();

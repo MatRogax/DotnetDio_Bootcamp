@@ -46,9 +46,9 @@ namespace task_manager.Controllers
         }
 
         [HttpGet("ObterPorData")]
-        public IActionResult GetByData(DateTime data)
+        public IActionResult GetByData(string data)
         {
-            List<Tasks?> tasks = _repository.GetByDate(data.ToString()).Result;
+            List<Tasks?> tasks = _repository.GetByDate(data).Result;
             return Ok(tasks);
         }
 
@@ -62,7 +62,7 @@ namespace task_manager.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateTaskDto task)
         {
-            Tasks createdTask = _repository.AddAsync(task).Result;
+            var createdTask = _repository.AddAsync(task).Result;
             return CreatedAtAction(nameof(GetById), new { id = createdTask.Id }, createdTask);
         }
 
@@ -71,8 +71,8 @@ namespace task_manager.Controllers
         {
             try
             {
-                await _repository.UpdateAsync(id, TaskData);
-                return NoContent();
+                var updateTask = await _repository.UpdateAsync(id, TaskData);
+                return Ok(updateTask);
             }
             catch (Exception ex)
             {
